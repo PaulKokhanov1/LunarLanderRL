@@ -58,6 +58,7 @@
     <li><a href="#about-my-implementation">About My Implementation</a></li>
     <li><a href="#obstacles-and-observations">Obstacles and Observations</a></li>
     <li><a href="#results">Results</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -194,7 +195,24 @@ Finally, one of the most interesting obstacles because of how unexpected it was 
 
 
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/1d0eaee2-a47e-414b-ad3d-a0a32b595691
+
+Nearly all the LL’s had the tendency to move towards the edge of the landing pad. After some investigation, I noticed this was due to me giving a reward for whether the right or left leg of the LL was in contact with the landing pad. Hence, funny enough the model abused this reward by getting to the edge of the landing pad and continuously entering and exiting the landing pad collider to maximize their reward. Thus, as a solution, I could’ve minimized the reward for having each leg in contact with the landing area, OR, I just move the reward to check collision right before the episode ends.
+
+Another Challenging task was finding the correct method to balance the rewards given to the Agent. This was most notable in rewards that had a spectrum depending on certain parameters of the LL. For example, calculating the speed magnitude of the LL had a spectrum of possible rewards, whereas checking whether the left or right leg was in contact with the landing pad had 2 possible outcomes. This was a challenge since it caused me to play around with varying the strength of the rewards that had a spectrum of possible outcomes. Sparse vs dense reward functions was the decision I had to make. I had played with the two possibilities. Giving the Agent one singular reward if it contacted the landing pad, which was our Sparse Reward OR giving the Agent multiple rewards throughout the episode, which was our dense reward.
+
+I will briefly describe the pros and cons of the two methods I used. To begin, the dense reward function led to much easier learning as the agent was inevitably greedy as it saw which action resulted in the greatest reward, by changing its speed and angular position it could maximize its reward each step. However, this also led to undesired behavior because of the agent possibly learning a sub-optimal path
+
+
+
+https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/bfdb2373-3eb8-4dbc-9b03-540ff1f9ade0
+
+As for Sparse Rewards, I simply defined mine as a reward given to the agent if they reach the landing pad, regardless of how close to the center of the pad they were. This led to significantly harder learning as the agent was unsure at the beginning on how to move. Hence, I played around with using some different techniques to get the agent on the right track. I first trained it using Curriculum learning, meaning I gave it a simpler task, basically I reduce the height of its starting position and reduced the variety of the x-position where the agent might spawn. Next, I used imitation learning, essentially, manually guiding the agent using recorded steps to show them how to reach their goal. MLAgents offers this ability through the use of Behavior Cloning and Generative Adversarial imitation Learning (GAIL) https://github.com/Unity-Technologies/ml-agents/blob/main/docs/ML-Agents-Overview.md#imitation-learning 
+
+
+### Imitation Learning in Unity
+
+In Unity, we can record our results using a script called “Demonstration Recorder” and then reference the recorded demonstrations within our .yaml file that we call once beginning training. Now the two methods Unity uses to create imitation training is Behavior Cloning and GAIL. Behavior Cloning essentially trains the Agent to mimic our demonstrations exactly, thus it is important to have sufficient demonstration data. Next GAIL, uses a 2nd neural network called the “discriminator”, all this 2nd NN does is that it gives the Agent a reward based on how close or far the agent was from the pre-recorded demonstrations. However, as mentioned in the documentation, GAIL falls victim to “survivor bias” which is caused because the agent wants to keep obtaining rewards for mimicking the pre-recorded demonstrations and so, this causes the agent to try and stay “alive”/not-end-the-episode for as long as possible to rack up the rewards. Hence, GAIL is not often used on its own, but rather in conjunction with Behavior Cloning or regular RL .
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -203,23 +221,70 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- RESULTS -->
 ## Results
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+To begin I will talk about the results of the Dense Reward function training, as seen in the video above, after training the dense reward we had overall good behavior from the agent, but the odd thing was that it preformed much better when spawned on the left side of the platform versus the right. Thus, I continued the training and had it only spawn on the right side of the platform to observe if this would improve its overall performance. We see the final performance below,
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/8e6ad184-a4c6-4ea4-9070-86dce91d868a
+
+We see this extra training DID NOT in fact have a positive impact on the LL pathfinding. Instead, the issue persisted. My hypothesis is that the agent is unable to relearn a more optimal approach after the millions of steps they have already taken and may require re-training.
+
+Now, lets look at the logistics of our results,
+
+![image](https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/ccd08168-034e-4f78-9bf6-214b7c3ffc3f)
+
+We can see that we had already obtained nearly our maximum reward after 2M steps. However, even after 2M steps, the LL would still behave improperly and hit the side of the landing pad instead of properly landing on top of the pad. Hence the extra 3M steps to refine this behavior was necessary.
+
+Now moving on to our Spare Reward results. Firstly, I began by running our imitation learning .yaml file with a curriculum learning method for about 2M steps. The curriculum learning method I used was to spawn the LL closer to the landing area. Here were the results,
+
+<img width="413" alt="BC_GAIL_Training_Ver_2_enlarged" src="https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/eb204f5d-526d-474a-95c0-289881425399">
+
+
+As we can see, although we were increasing our cumulative reward with more steps, we seemed to get worse after reaching our maximum. This was expected as we only give a reward to the Agent for landing on the pad, so there is a large chance for it to begin “screwing up” and especially since we were only using behavior cloning and GAIL, the only learning was coming from my pre-recorded demonstrations, and as my demonstrations were not perfect, a swing of cumulative rewards is highly possible. Then I let it train simply using GAIL (using less strength) and our extrinsic reward system. The results seemed to follow a similar pattern as seen in the Dense Reward function learning.
+
+Then after reintroducing the reward functions within the training to complete the overall training we received the following results,
+
+<img width="417" alt="Final_training_results_Ver_2_enlarged" src="https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/68ae13e0-691c-4e7a-b168-c03851f2c21a">
+
+
+Clearly we see the Agent began to converge to consistently obtaining nearly the maximum reward quite quickly. Personally, I don’t believe this would have occurred as quickly without using Ciricuulum learning and imitation learning as the agent would have had to explore for significantly longer. Furthermore, without the recorded demonstrations and the strict behavioral rewards that we use in Dense Reward functions we would have seen much more odd behavior from the LL. For example, taking in the video of our agent after the completed training,
+
+
+
+https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/d6069b0c-e74f-4218-895b-6d3ed1198a05
+
+We can right away see that it does not value quickly getting to the landing pad nor maintaining a horizontal level with the ground as it approaches the landing pad. Moreover, it is also unconcerned with how close we are to the center of the landing pad. 
+
+Finally, as a fun experiment, after adjusting a couple lines in the code and letting the Agent train for 24 hours time using dense reward functions, I obtained the following final training result,
+
+
+
+https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/66743d28-94d3-41ac-83e8-8d5d8dc309b0
+
+With these metrics,
+
+<img width="667" alt="24_hour_training" src="https://github.com/PaulKokhanov1/LunarLanderRL/assets/69466838/095b6fb5-bd8b-4985-b8ed-ed158528098f">
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
+<!-- CONCLUSION -->
+## Conclusion
+
+After many iterations of training the Agents by manipulating certain hyperparameters, the overall yaml file, exploring Sparse vs Dense Reward functions, I’d conclude that a dense reward function with some level of imitation learning is the best for optimal results. There are also certain hyperparameters to be played with, such as how many hidden layers and hidden units we include, but I don’t think they have as significant of an impact as how we decide to balance our reward system for the Agent. 
+
+Of course, this project will never be finished as there are sooooo many elements to explore, but from what started out as an idea to reimplement a simple environment and turned into a full multi-week research endeavor I enjoyed the entire process. Not only will I continue to explore different elements of training the model but maybe even expand into a 3D space to see how my results are altered by including a third dimension. 
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Paul Kokhanov - [Website](https://paulkokhanov.com/) - paul.kokhanov@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/PaulKokhanov1/LunarLanderRL](https://github.com/PaulKokhanov1/LunarLanderRL)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -228,9 +293,9 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Unity MLAgents](https://github.com/Unity-Technologies/ml-agents)
+* [Gymnasium](https://gymnasium.farama.org/)
+* [ML Specialization taught by Andrew Ng](https://www.coursera.org/specializations/machine-learning-introduction)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
