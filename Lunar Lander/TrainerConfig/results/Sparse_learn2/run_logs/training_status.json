@@ -1,0 +1,65 @@
+{
+    "Move To Target": {
+        "checkpoints": [
+            {
+                "steps": 8499967,
+                "file_path": "results\\Sparse_learn2\\Move To Target\\Move To Target-8499967.onnx",
+                "reward": 100.0,
+                "creation_time": 1708631885.2091792,
+                "auxillary_file_paths": [
+                    "results\\Sparse_learn2\\Move To Target\\Move To Target-8499967.pt"
+                ]
+            },
+            {
+                "steps": 8999992,
+                "file_path": "results\\Sparse_learn2\\Move To Target\\Move To Target-8999992.onnx",
+                "reward": 100.0,
+                "creation_time": 1708632369.1559331,
+                "auxillary_file_paths": [
+                    "results\\Sparse_learn2\\Move To Target\\Move To Target-8999992.pt"
+                ]
+            },
+            {
+                "steps": 9499981,
+                "file_path": "results\\Sparse_learn2\\Move To Target\\Move To Target-9499981.onnx",
+                "reward": 100.0,
+                "creation_time": 1708632850.9674432,
+                "auxillary_file_paths": [
+                    "results\\Sparse_learn2\\Move To Target\\Move To Target-9499981.pt"
+                ]
+            },
+            {
+                "steps": 9999961,
+                "file_path": "results\\Sparse_learn2\\Move To Target\\Move To Target-9999961.onnx",
+                "reward": 100.0,
+                "creation_time": 1708633332.814615,
+                "auxillary_file_paths": [
+                    "results\\Sparse_learn2\\Move To Target\\Move To Target-9999961.pt"
+                ]
+            },
+            {
+                "steps": 10000017,
+                "file_path": "results\\Sparse_learn2\\Move To Target\\Move To Target-10000017.onnx",
+                "reward": 100.0,
+                "creation_time": 1708633332.868003,
+                "auxillary_file_paths": [
+                    "results\\Sparse_learn2\\Move To Target\\Move To Target-10000017.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10000017,
+            "file_path": "results\\Sparse_learn2\\Move To Target.onnx",
+            "reward": 100.0,
+            "creation_time": 1708633332.868003,
+            "auxillary_file_paths": [
+                "results\\Sparse_learn2\\Move To Target\\Move To Target-10000017.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.2.0+cpu"
+    }
+}

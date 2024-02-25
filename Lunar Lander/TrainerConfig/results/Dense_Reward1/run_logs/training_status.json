@@ -1,0 +1,65 @@
+{
+    "Move To Target": {
+        "checkpoints": [
+            {
+                "steps": 68999981,
+                "file_path": "results\\Dense_Reward1\\Move To Target\\Move To Target-68999981.onnx",
+                "reward": 270.25382653061223,
+                "creation_time": 1708781567.1610327,
+                "auxillary_file_paths": [
+                    "results\\Dense_Reward1\\Move To Target\\Move To Target-68999981.pt"
+                ]
+            },
+            {
+                "steps": 69499987,
+                "file_path": "results\\Dense_Reward1\\Move To Target\\Move To Target-69499987.onnx",
+                "reward": 268.00863781309965,
+                "creation_time": 1708781963.8162665,
+                "auxillary_file_paths": [
+                    "results\\Dense_Reward1\\Move To Target\\Move To Target-69499987.pt"
+                ]
+            },
+            {
+                "steps": 69828965,
+                "file_path": "results\\Dense_Reward1\\Move To Target\\Move To Target-69828965.onnx",
+                "reward": 269.419254022803,
+                "creation_time": 1708782447.2504869,
+                "auxillary_file_paths": [
+                    "results\\Dense_Reward1\\Move To Target\\Move To Target-69828965.pt"
+                ]
+            },
+            {
+                "steps": 69999950,
+                "file_path": "results\\Dense_Reward1\\Move To Target\\Move To Target-69999950.onnx",
+                "reward": 273.0691247755481,
+                "creation_time": 1708782616.4643564,
+                "auxillary_file_paths": [
+                    "results\\Dense_Reward1\\Move To Target\\Move To Target-69999950.pt"
+                ]
+            },
+            {
+                "steps": 70000003,
+                "file_path": "results\\Dense_Reward1\\Move To Target\\Move To Target-70000003.onnx",
+                "reward": 273.84530615234377,
+                "creation_time": 1708782616.5121088,
+                "auxillary_file_paths": [
+                    "results\\Dense_Reward1\\Move To Target\\Move To Target-70000003.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 70000003,
+            "file_path": "results\\Dense_Reward1\\Move To Target.onnx",
+            "reward": 273.84530615234377,
+            "creation_time": 1708782616.5121088,
+            "auxillary_file_paths": [
+                "results\\Dense_Reward1\\Move To Target\\Move To Target-70000003.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.2.0+cpu"
+    }
+}
