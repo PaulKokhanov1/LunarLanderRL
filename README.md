@@ -64,7 +64,9 @@
   </ol>
 </details>
 
-
+## Important Note
+If you plan to clone and try out the project, you will have to make a virtual environment within the project folder and download the necessary packages, I did not include the venv in my commit as it stored too large of files for 
+github to handle, if you would like to know all needed packages, either refer to MLAgents docs or check out this video: https://www.youtube.com/watch?v=RANRz9oyzko&ab_channel=TheAshBot
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
